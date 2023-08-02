@@ -1,6 +1,12 @@
 <!-- home.html -->
-{% load static %}
+{% include 'navbar.html' %}
+<h1> Homepage of my Library </h1>
+<html>
+<head>
+    {% load static %}
+    <link rel="shortcut icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" >
+</head>
 <body>
-<article> Article Lpanema - a newborn outer world of no-borders.</article>
+    <article> Article Lpanema - a newborn outer world of no-borders.</article>
 </body>
-<link rel="shortcut icon" type="image/png" href="{% static 'static/images/favicon.ico' %}" >
+</html>

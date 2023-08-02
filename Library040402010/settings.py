@@ -55,7 +55,7 @@ ROOT_URLCONF = 'Library040402010.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates_for_my_library'],
+        'DIRS': [BASE_DIR / 'templates_for_my_library'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
