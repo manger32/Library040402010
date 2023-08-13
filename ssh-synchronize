@@ -1,1 +1,2 @@
+#!/bin/bash
 eval "$(ssh-agent -s)"; ssh-add ssh-rsa-sha2-256; ssh-add ssh-rsa-sha2-256-2;

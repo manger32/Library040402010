@@ -1,0 +1,14 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> {{auth_id.name}} </h1>
+<body>
+<form action="handler.php">
+  <p><b>Укажите Ваш тип сотрудничества &quot;*&quot;?</b></p>
+  <p><input type="radio" name="answer" value="a1">Читатель<Br>
+  <input type="radio" name="answer" value="a2">Постоянный сотрудник журнала<Br>
+  <input type="radio" name="answer" value="a3">Администратор</p>
+  <p><input type="submit"></p>
+ </form>
+</body>
+{% endblock %}
