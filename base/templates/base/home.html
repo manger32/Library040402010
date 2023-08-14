@@ -6,7 +6,7 @@
     <div>
         {% for auth_id in authorize_mode %}
             <div>
-                <h5>{{auth_id.id}} -- <a href="/authorize/{{auth_id.id}}">{{auth_id.name}}</a>></h5>
+                <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>
             </div>
         {% endfor %}
     </div>
