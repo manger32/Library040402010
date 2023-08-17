@@ -3,6 +3,7 @@
 {% block content %}
 <h1> Основная страница библиотеки </h1>
 <div>
+    <a href="{% url 'create-resource' %}">Create Resource</a>
     <div>
         {% for auth_id in authorize_mode %}
             <div>

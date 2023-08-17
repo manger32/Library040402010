@@ -23,3 +23,7 @@ def authorize(request, pk):
 
 def navbar(request):
     return render(request, 'navbar.html')
+
+def create_resource(request):
+    context = {}
+    return render(request, 'base/authorize_form.html', context)

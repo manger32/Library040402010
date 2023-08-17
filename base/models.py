@@ -15,6 +15,8 @@ class Authorize(models.Model):
     login = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
     assigned = models.ForeignKey('Assigned_material',on_delete=models.SET_NULL, null = True)
+    def __str__(self):
+        return self.name
 class Book(models.Model):
     name = models.CharField(max_length=30)
     def __str__(self):
