@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 # Database model and Admin panel
 
 class Authorize(models.Model):
-    #host =
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, null = True)
     class Mode(models.IntegerChoices):
         admin = 0
         test = -1
@@ -14,7 +14,7 @@ class Authorize(models.Model):
     mode = models.IntegerField(choices = Mode.choices)
     login = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
-
+    assigned = models.ForeignKey('Assigned_material',on_delete=models.SET_NULL, null = True)
 class Book(models.Model):
     name = models.CharField(max_length=30)
     def __str__(self):
