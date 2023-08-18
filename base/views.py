@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
+from django.db.models import Q
 from . import views
 from django.http import HttpResponse
 from .models import LibraryEntity
-from .models import Authorize
+from .models import Authorize, Book
 from .forms import AuthorizeForm
 
 #auth = [
@@ -13,8 +14,17 @@ from .forms import AuthorizeForm
 
 def home(request):
     # render different context in different cases
-    Auth = Authorize.objects.all()
-    context = {'authorize_mode': Auth}
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    Auth = Authorize.objects.filter(
+        Q(assigned__library_entity_id__book__name__icontains=q) |
+        Q(name__contains=q) |
+        Q(assigned__library_entity_id__description__contains=q)
+    )
+    #__icontains - case insensitive parameter.
+    books = Book.objects.all()
+    authorize_count = Auth.count()
+    #.len() mathod also available
+    context = {'authorize_mode': Auth, 'books': books, 'Authorize_count': authorize_count}
     return render(request, 'base/home.html', context)
 
 def authorize(request, pk):
@@ -39,5 +49,17 @@ def create_resource(request):
 def update_resource(request, pk):
     auth = Authorize.objects.get(id=pk)
     form = AuthorizeForm(instance=auth)
+    if request.method =='POST':
+        form = AuthorizeForm(request.POST,instance=auth)
+        if form.is_valid():
+            form.save()
+            return redirect('Homepage')
     context = {'form':form}
     return render(request, 'base/authorize_form.html', context)
+
+def delete_resource(request, pk):
+    auth = Authorize.objects.get(id=pk)
+    if request.method == 'POST':
+        auth.delete()
+        return redirect('Homepage')
+    return render(request, 'base/delete.html', {'obj':auth})

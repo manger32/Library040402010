@@ -7,4 +7,5 @@ urlpatterns = [
     path('navbar/', views.navbar, name = "Navigation"),
     path('create-resource/', views.create_resource, name="create-resource"),
     path('update-resource/<str:pk>/', views.update_resource, name="update-resource"),
+    path('delete-resource/<str:pk>/', views.delete_resource, name="delete-resource"),
 ]

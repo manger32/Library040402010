@@ -2,21 +2,50 @@
 
 {% block content %}
 <h1> Основная страница библиотеки </h1>
-<div>
-    <a href="{% url 'create-resource' %}">Create Resource</a>
-    <hr>
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr;
+    }
+</style>
+
+<div class = "home-container">
+
     <div>
-        {% for auth_id in authorize_mode %}
-            <div>
-                <a href="{% url 'update-resource' auth_id.id %}">Edit</a>
-                <hr>
-                <span>@{{auth_id.host.username}}</span>
-                <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>
-                <small>Currently working at a book: {{auth_id.assigned.library_entity_id.book.name}}</small>
-                <hr>
-            </div>
+        <h3>Поиск материалов</h3>
+        <hr>
+
+        <div>
+            <a href="{% url 'Homepage' %}">All Book List</a>
+        </div>
+
+        {% for book in books %}
+        <div>
+            <a href="{% url 'Homepage' %}?q={{book.name}}">{{book.name}}</a>
+        </div>
         {% endfor %}
     </div>
+
+     <div>
+        <h5>Всего {{Authorize_count}} пользователей работают с данными {{Assigned_count}} материалами</h5>
+        <a href="{% url 'create-resource' %}">Create Resource</a>
+        <hr>
+        <div>
+            {% for auth_id in authorize_mode %}
+                <div>
+                    <a href="{% url 'update-resource' auth_id.id %}">Edit</a>
+                    <a href="{% url 'delete-resource' auth_id.id %}">Delete</a>
+                    <hr>
+                    <span>@{{auth_id.host.username}}</span>
+                    <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>
+                    <small>Currently working at a book: {{auth_id.assigned.library_entity_id.book.name}}</small>
+                    <hr>
+                </div>
+            {% endfor %}
+        </div>
+     </div>
+
 </div>
 <html>
 <head>
