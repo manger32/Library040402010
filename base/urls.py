@@ -6,4 +6,5 @@ urlpatterns = [
     path('authorize/<str:pk>/', views.authorize, name = "Authorize"),
     path('navbar/', views.navbar, name = "Navigation"),
     path('create-resource/', views.create_resource, name="create-resource"),
+    path('update-resource/<str:pk>/', views.update_resource, name="update-resource"),
 ]

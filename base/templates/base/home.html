@@ -4,9 +4,11 @@
 <h1> Основная страница библиотеки </h1>
 <div>
     <a href="{% url 'create-resource' %}">Create Resource</a>
+    <hr>
     <div>
         {% for auth_id in authorize_mode %}
             <div>
+                <a href="{% url 'update-resource' auth_id.id %}">Edit</a>
                 <hr>
                 <span>@{{auth_id.host.username}}</span>
                 <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>

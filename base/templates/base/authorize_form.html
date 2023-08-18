@@ -5,7 +5,8 @@
 <div>
     <form method="POST" action="">
         {% csrf_token %}
-        <input type = "upload" value="Upload"/>
+        {{form.as_p}}
+        <input type = "submit" value="Upload"/>
     </form>
 </div>
 
