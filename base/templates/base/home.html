@@ -29,14 +29,17 @@
 
      <div>
         <h5>Всего {{Authorize_count}} пользователей работают с данными {{Assigned_count}} материалами</h5>
-        <a href="{% url 'create-resource' %}">Create Resource</a>
+        <hr>
+         <a href="{% url 'create-resource' %}">Create Resource</a>
         <hr>
         <div>
             {% for auth_id in authorize_mode %}
                 <div>
+                    {% if request.user == auth_id.host %}
                     <a href="{% url 'update-resource' auth_id.id %}">Edit</a>
                     <a href="{% url 'delete-resource' auth_id.id %}">Delete</a>
                     <hr>
+                    {% endif %}
                     <span>@{{auth_id.host.username}}</span>
                     <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>
                     <small>Currently working at a book: {{auth_id.assigned.library_entity_id.book.name}}</small>

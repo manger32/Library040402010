@@ -3,12 +3,29 @@
 {% block content %}
 <h1> {{auth_id.name}} </h1>
 <body>
-<form action="handler.php">
-  <p><b>Укажите Ваш тип сотрудничества &quot;*&quot;?</b></p>
-  <p><input type="radio" name="answer" value="a1">Читатель<Br>
-  <input type="radio" name="answer" value="a2">Постоянный сотрудник журнала<Br>
-  <input type="radio" name="answer" value="a3">Администратор</p>
-  <p><input type="submit"></p>
- </form>
+
+<p>{{auth_id.description}}</p>
+
+  <div class="comment-wrapper">
+    <h3>Чат</h3>
+    <hr>
+    {%for comment in comments%}
+      <div>
+        <small>@{{comment.user_id}}   {{comment.created|timesince}} ago</small>
+        <p>{{comment.body}}</p>
+        <hr>
+      </div>
+    {%endfor%}
+  </div>
+
+{% if request.user.is_authenticated %}
+<div class="comment-form">
+  <form method="POST" action="">
+    {% csrf_token %}
+    <input type="text" name="body" placeholder="Введите текст вашего сообщения здесь..."/>
+  </form>
+</div>
+{% endif %}
+
 </body>
 {% endblock %}

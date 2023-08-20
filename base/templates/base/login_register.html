@@ -1,0 +1,38 @@
+{% extends 'main.html' %}
+
+{% block content %}
+
+{% if page == 'login' %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        <label>Логин:</label>
+        <input type="text"  name="Логин пользователя" placeholder="Введите ваш логин"/>
+        <label>Пароль:</label>
+        <input type="password" name="Пароль" placeholder="Введите пароль"/>
+        <input type="submit" value="Войти"/>
+    </form>
+    <p>Не зарегистрированы?</p>
+    <a href="{% url 'register' %}">Зарегистрироваться</a>
+</div>
+{% else %}
+<div>
+    <form method="POST" action="">
+        {% csrf_token %}
+        1.
+        {{form.as_p}}
+        2.
+        <form action="handler.php">
+              <p><b>Укажите Ваш тип сотрудничества &quot;*&quot;?</b></p>
+              <p><input type="radio" name="answer" value="a1">Читатель<Br>
+              <input type="radio" name="answer" value="a2">Постоянный сотрудник журнала<Br>
+              <input type="radio" name="answer" value="a3">Администратор</p>
+         </form>
+        <input type="submit" value="Зарегистрироваться"/>
+    </form>
+    <p>Уже зарегистрированы?</p>
+    <a href="{% url 'login' %}">Войти</a>
+</div>
+{% endif %}
+
+{% endblock content %}

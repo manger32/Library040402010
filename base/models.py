@@ -14,7 +14,7 @@ class Authorize(models.Model):
     mode = models.IntegerField(choices = Mode.choices)
     login = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
-    assigned = models.ForeignKey('Assigned_material',on_delete=models.SET_NULL, null = True)
+    assigned = models.ForeignKey('Assigned_material', on_delete=models.SET_NULL, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
     class Meta:
@@ -27,9 +27,9 @@ class Book(models.Model):
         return self.name
 
 class LibraryEntity(models.Model):
-    host = models.ForeignKey(User, on_delete=models.SET_NULL, null = True)
-    access_rights = models.ForeignKey(Authorize, on_delete=models.SET_NULL, null = True)
-    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null = True)
+    host = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    access_rights = models.ForeignKey(Authorize, on_delete=models.SET_NULL, null=True)
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
     description = models.CharField(max_length = 50)
     name = models.CharField(max_length = 50)
     year = models.IntegerField()
@@ -46,7 +46,7 @@ class LibraryEntity(models.Model):
 class Assigned_material(models.Model):
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     authorize_id = models.ForeignKey(Authorize, on_delete=models.CASCADE)
-    library_entity_id = models.ForeignKey(LibraryEntity, on_delete=models.CASCADE)
+    library_entity_id = models.ForeignKey(LibraryEntity, on_delete=models.CASCADE, null=True)
     body = models.TextField(max_length = 90)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

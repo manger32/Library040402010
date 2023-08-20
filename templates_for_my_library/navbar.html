@@ -6,4 +6,10 @@
     <input type="text" name="q" placeholder="Найти книгу по..."/>
 </form>
 
+{% if request.user.is_authenticated %}
+<p>Добро пожаловать, {{request.user}}</p>
+<a href="{% url 'logout' %}">Выйти</a>
+{% else %}
+<a href="{% url 'login' %}">Войти</a>
+{% endif %}
 <hr>
