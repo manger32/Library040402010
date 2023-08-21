@@ -14,6 +14,7 @@ class Authorize(models.Model):
     mode = models.IntegerField(choices = Mode.choices)
     login = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
+    participants = models.ManyToManyField(User, related_name='participants', blank=True)
     assigned = models.ForeignKey('Assigned_material', on_delete=models.SET_NULL, null=True)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

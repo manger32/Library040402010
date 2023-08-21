@@ -42,7 +42,7 @@
                     {% endif %}
                     <span>@{{auth_id.host.username}}</span>
                     <h5>{{auth_id.id}} -- <a href="{% url 'Authorize' auth_id.id %}">{{auth_id.name}}</a>></h5>
-                    <small>Currently working at a book: {{auth_id.assigned.library_entity_id.book.name}}</small>
+                    <small>Работает над книгой: {{auth_id.assigned.library_entity_id.book.name}}</small>
                     <hr>
                 </div>
             {% endfor %}

@@ -75,15 +75,17 @@ def home(request):
 def authorize(request, pk):
     Auth_id = Authorize.objects.get(id=pk)
     comments = Auth_id.assigned_material_set.all().order_by('-created')  # query child objects of a Auth-id
+    participants = Auth_id.participants.all()
     if request.method == "POST":
         comment = Assigned_material.objects.create(
             user_id=request.user,
             authorize_id=Auth_id,
             body=request.POST.get('body')
         )
+        Auth_id.participants.add(request.user)
         return redirect('Authorize', pk=Auth_id.id)
 
-    context = {'auth_id': Auth_id, 'comments': comments}
+    context = {'auth_id': Auth_id, 'comments': comments, 'participants': participants}
     return render(request, 'base/authorize.html', context)
 
 def navbar(request):
@@ -105,14 +107,14 @@ def create_resource(request):
 def update_resource(request, pk):
     auth = Authorize.objects.get(id=pk)
     form = AuthorizeForm(instance=auth)
-    if request.user != auth.host or auth.mode <= 0:
+    if request.user != auth.host: # or auth.mode <= 0:
         return HttpResponse('Этот раздел сайта доступен только пользователю ' + str(auth.host))
     if request.method =='POST':
-        form = AuthorizeForm(request.POST,instance=auth)
+        form = AuthorizeForm(request.POST, instance=auth)
         if form.is_valid():
             form.save()
             return redirect('Homepage')
-    context = {'form':form}
+    context = {'form': form}
     return render(request, 'base/authorize_form.html', context)
 @login_required(login_url='login')
 def delete_resource(request, pk):
@@ -120,4 +122,16 @@ def delete_resource(request, pk):
     if request.method == 'POST':
         auth.delete()
         return redirect('Homepage')
-    return render(request, 'base/delete.html', {'obj':auth})
+    context = {'obj': auth}
+    return render(request, 'base/delete.html', context)
+
+@login_required(login_url='login')
+def delete_comment(request, pk):
+    auth_m = Assigned_material.objects.get(id=pk)
+    if request.user != auth_m.user_id:
+        return HttpResponse('Для данного действия не хватает полномочий')
+    if request.method == 'POST':
+        auth_m.delete()
+        return redirect('Homepage') # ('Authorize', pk=Auth_id.id)
+    context = {'obj': auth_m}
+    return render(request, 'base/delete.html', context)

@@ -1,31 +1,57 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1> {{auth_id.name}} </h1>
+
+<style>
+  .authorize-container{
+    display:grid;
+    grid-template-columns: 3fr 1fr;
+  }
+</style>
+
 <body>
+<div class ="authorize-container">
+  <div>
 
-<p>{{auth_id.description}}</p>
+      <h1> {{auth_id.name}} </h1>
+      <p>{{auth_id.description}}</p>
 
-  <div class="comment-wrapper">
-    <h3>Чат</h3>
-    <hr>
-    {%for comment in comments%}
-      <div>
-        <small>@{{comment.user_id}}   {{comment.created|timesince}} ago</small>
-        <p>{{comment.body}}</p>
-        <hr>
+        <div class="comment-wrapper">
+          <h3>Чат</h3>
+          <hr>
+
+          {% for comment in comments %}
+            <div>
+                {% if request.user == comment.user_id %}
+                <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+                {% endif %}
+              <small>@{{comment.user_id}}   {{comment.created|timesince}} ago</small>
+              <p>{{comment.body}}</p>
+              <hr>
+            </div>
+          {%endfor%}
+        </div>
+
+      {% if request.user.is_authenticated %}
+      <div class="comment-form">
+        <form method="POST" action="">
+          {% csrf_token %}
+          <input type="text" name="body" placeholder="Введите текст вашего сообщения здесь..."/>
+        </form>
       </div>
-    {%endfor%}
-  </div>
+      {% endif %}
+    </div>
 
-{% if request.user.is_authenticated %}
-<div class="comment-form">
-  <form method="POST" action="">
-    {% csrf_token %}
-    <input type="text" name="body" placeholder="Введите текст вашего сообщения здесь..."/>
-  </form>
+    <div>
+      <h3>Участники</h3>
+      <hr>
+
+        {% for user in participants %}
+        <div>
+            <p>@{{user.username}}</p>
+        </div>
+        {% endfor %}
+    </div>
 </div>
-{% endif %}
-
 </body>
 {% endblock %}
