@@ -1,0 +1,11 @@
+<h3>Поиск материалов</h3>
+<hr>
+
+<div>
+    <a href="{% url 'Homepage' %}">All Book List</a>
+</div>
+{% for book in books %}
+<div>
+    <a href="{% url 'Homepage' %}?q={{book.name}}">{{book.name}}</a>
+</div>
+{% endfor %}

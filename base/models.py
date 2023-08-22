@@ -51,6 +51,8 @@ class Assigned_material(models.Model):
     body = models.TextField(max_length = 90)
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        ordering = ['-updated', '-created']
     def __str__(self):
         return self.body[0:40]
 # Create your models here.

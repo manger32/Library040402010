@@ -69,12 +69,13 @@ def home(request):
     books = Book.objects.all()
     authorize_count = Auth.count()
     #.len() mathod also available
-    context = {'authorize_mode': Auth, 'books': books, 'Authorize_count': authorize_count}
+    auth_comments = Assigned_material.objects.filter(Q(library_entity_id__book__name__icontains=q))
+    context = {'authorize_mode': Auth, 'books': books, 'Authorize_count': authorize_count, 'auth_comments': auth_comments}
     return render(request, 'base/home.html', context)
 
 def authorize(request, pk):
     Auth_id = Authorize.objects.get(id=pk)
-    comments = Auth_id.assigned_material_set.all().order_by('-created')  # query child objects of a Auth-id
+    comments = Auth_id.assigned_material_set.all()  # query child objects of a Auth-id
     participants = Auth_id.participants.all()
     if request.method == "POST":
         comment = Assigned_material.objects.create(

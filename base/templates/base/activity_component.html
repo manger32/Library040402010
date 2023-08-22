@@ -1,0 +1,13 @@
+<h3>Последние взаимодействия с ресурсом</h3>
+<hr>
+{% for comment in auth_comments %}
+<div>
+    <small>@{{comment.user_id}} {{comment.created|timesince}}</small>
+    <small>ресурс "{{comment.authorize_id}}"</small>
+    <p>{{comment}}</p>
+    {% if request.user == comment.user_id %}
+    <a href="{% url 'delete-comment' comment.id %}">Delete</a>
+    {% endif %}
+    <hr>
+</div>
+{% endfor %}
