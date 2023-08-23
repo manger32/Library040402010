@@ -5,11 +5,9 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
-from . import views
 from django.http import HttpResponse
-from .models import LibraryEntity
-from .models import Authorize, Book, Assigned_material
-from .forms import AuthorizeForm
+from .models import Authorize, Book, Assigned_material, LibraryEntity
+from .forms import AuthorizeForm, UserForm
 
 #auth = [
 #    {'id':1, 'name': 'Исходная библиотека - регистрация'},
@@ -65,17 +63,16 @@ def home(request):
         Q(name__contains=q) |
         Q(assigned__library_entity_id__description__contains=q)
     )
-    #__icontains - case insensitive parameter.
     books = Book.objects.all()
     authorize_count = Auth.count()
-    #.len() mathod also available
     auth_comments = Assigned_material.objects.filter(Q(library_entity_id__book__name__icontains=q))
-    context = {'authorize_mode': Auth, 'books': books, 'Authorize_count': authorize_count, 'auth_comments': auth_comments}
+    assigned_count = auth_comments.count()
+    context = {'authorize_mode': Auth, 'books': books, 'Authorize_count': authorize_count, 'auth_comments': auth_comments, 'assigned_count': assigned_count}
     return render(request, 'base/home.html', context)
 
 def authorize(request, pk):
     Auth_id = Authorize.objects.get(id=pk)
-    comments = Auth_id.assigned_material_set.all()  # query child objects of a Auth-id
+    comments = Auth_id.assigned_material_set.all()
     participants = Auth_id.participants.all()
     if request.method == "POST":
         comment = Assigned_material.objects.create(
@@ -92,30 +89,50 @@ def authorize(request, pk):
 def navbar(request):
     return render(request, 'navbar.html')
 
+def userProfile(request, pk):
+    user_opened = User.objects.get(id=pk)
+    authorize_mode = user_opened.authorize_set.all()
+    auth_comments = user_opened.assigned_material_set.all()
+    books = Book.objects.all()
+    context = {'user': user_opened, 'authorize_mode': authorize_mode, 'auth_comments': auth_comments, 'books': books}
+    return render(request,'base/profile.html', context)
+
 @login_required(login_url='login') # type of user check!
 def create_resource(request):
-    #read about requests
     form = AuthorizeForm()
+    books = Book.objects.all()
     if request.method == 'POST':
-        form = AuthorizeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('Homepage')
-    context = {'form': form}
+        book_name = request.POST.get('book')
+        book, created = Book.objects.get_or_create(name=book_name)
+        Authorize.objects.create(
+            host=request.user,
+            book=book,
+            name=request.POST.get('name'),
+            mode=0,
+            login=User.username,
+            password=User.username,  # cannot retrieve password directly
+            description=request.POST.get('description')
+        )
+        return redirect('Homepage')
+    context = {'form': form, 'books': books}
     return render(request, 'base/authorize_form.html', context)
 
 @login_required(login_url='login')
 def update_resource(request, pk):
     auth = Authorize.objects.get(id=pk)
     form = AuthorizeForm(instance=auth)
+    books = Book.objects.all()
     if request.user != auth.host: # or auth.mode <= 0:
         return HttpResponse('Этот раздел сайта доступен только пользователю ' + str(auth.host))
     if request.method =='POST':
-        form = AuthorizeForm(request.POST, instance=auth)
-        if form.is_valid():
-            form.save()
-            return redirect('Homepage')
-    context = {'form': form}
+        book_name = request.POST.get('book')
+        book, created = Book.objects.get_or_create(name=book_name)
+        auth.name = request.POST.get('name')
+        auth.book = book
+        auth.description = request.POST.get('description')
+        auth.save()
+        return redirect('Homepage')
+    context = {'form': form, 'books': books, 'auth':auth }
     return render(request, 'base/authorize_form.html', context)
 @login_required(login_url='login')
 def delete_resource(request, pk):
@@ -136,3 +153,13 @@ def delete_comment(request, pk):
         return redirect('Homepage') # ('Authorize', pk=Auth_id.id)
     context = {'obj': auth_m}
     return render(request, 'base/delete.html', context)
+@login_required(login_url='login')
+def updateProfile(request):
+    user = request.user
+    form = UserForm(instance=user)
+    if request.method=="POST":
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+    return render(request, 'base/update_profile.html', {'form':form})

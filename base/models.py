@@ -10,10 +10,12 @@ class Authorize(models.Model):
         user = 1
         librarian = 2
         guest = 3
+    book = models.ForeignKey('Book', on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=50)
     mode = models.IntegerField(choices = Mode.choices)
     login = models.CharField(max_length = 100)
     password = models.CharField(max_length = 100)
+    description = models.CharField(max_length=50, null=True)
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
     assigned = models.ForeignKey('Assigned_material', on_delete=models.SET_NULL, null=True)
     updated = models.DateTimeField(auto_now=True)

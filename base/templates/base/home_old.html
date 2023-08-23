@@ -1,0 +1,36 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1> Основная страница библиотеки </h1>
+
+<style>
+    .home-container{
+        display: grid;
+        grid-template-columns: 1fr 3fr 1fr;
+    }
+</style>
+
+<div class = "home-container">
+
+    <div>
+        {% include 'base/books_component.html' %}
+    </div>
+
+     <div>
+        <h5>Всего {{Authorize_count}} пользователей работают с данными {{Assigned_count}} материалами</h5>
+        <hr>
+         <a href="{% url 'create-resource' %}">Create Resource</a>
+        <hr>
+        {% include 'base/feed_component.html' %}
+     </div>
+    <div>
+        {% include 'base/activity_component.html' %}
+    </div>
+</div>
+<html>
+<head>
+    {% load static %}
+    <link rel="shortcut icon" type="image/x-icon" href="{% static '/images/favicon.ico' %}" >
+</head>
+</html>
+{% endblock %}
