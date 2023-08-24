@@ -63,7 +63,7 @@ def home(request):
         Q(name__contains=q) |
         Q(assigned__library_entity_id__description__contains=q)
     )
-    books = Book.objects.all()
+    books = Book.objects.all()[0:5]
     authorize_count = Auth.count()
     auth_comments = Assigned_material.objects.filter(Q(library_entity_id__book__name__icontains=q))
     assigned_count = auth_comments.count()
@@ -162,4 +162,13 @@ def updateProfile(request):
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk=user.id)
-    return render(request, 'base/update_profile.html', {'form':form})
+    return render(request, 'base/update_profile.html', {'form': form})
+
+def topicsPage(request):
+    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    topics = Book.objects.filter(name__icontains=q)
+    return render(request, 'base/topics.html', {'topics': topics})
+
+def activitiesPage(request):
+    auth_comments = Assigned_material.objects.all()
+    return render(request, 'base/activity.html', {'auth_comments': auth_comments})

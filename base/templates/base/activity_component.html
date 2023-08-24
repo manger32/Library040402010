@@ -1,6 +1,6 @@
 <div class="activities">
       <div class="activities__header">
-        <h2>Recent Activities</h2>
+        <h2>Последние комментарии</h2>
       </div>
         {% for comment in auth_comments %}
       <div class="activities__box">
@@ -11,7 +11,7 @@
             </div>
             <p>
               @{{comment.user_id}}
-              <span>{{comment.created|timesince}} ago</span>
+              <span>{{comment.created|timesince}} назад</span>
             </p>
           </a>
             {% if request.user == comment.user_id %}
