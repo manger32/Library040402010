@@ -1,0 +1,8 @@
+<body>
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{form_file.as_p}}
+    <input type="submit" value="Загрузить">
+  </form>
+  <p><a href="{% url 'Homepage' %}">Вернуться на главную страницу</a></p>
+</body>

@@ -58,3 +58,6 @@ class Assigned_material(models.Model):
     def __str__(self):
         return self.body[0:40]
 # Create your models here.
+class fileHandler(models.Model):
+    title = models.CharField(max_length=200)
+    file = models.FileField(upload_to='documents/')
