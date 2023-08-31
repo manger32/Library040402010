@@ -1,13 +1,11 @@
 from django.shortcuts import render, redirect
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from .models import Authorize, Book, Assigned_material, LibraryEntity
-from .forms import AuthorizeForm, UserForm, fileForm
+from .models import Authorize, Book, Assigned_material, LibraryEntity, User
+from .forms import AuthorizeForm, UserForm, fileForm, UserCreation_Custom
 from django.core.files.storage import FileSystemStorage
 
 #auth_id = [
@@ -19,23 +17,23 @@ from django.core.files.storage import FileSystemStorage
 
 def loginPage(request):
     page = 'login'
-    if request.user.is_auth_identicated:
+    if request.user.is_authenticated:
         return redirect('Homepage')
     if request.method == 'POST':
-        username = request.POST.get('Логин пользователя').lower()
-        password = request.POST.get('Пароль')
+        email = request.POST.get('email').lower
+        password = request.POST.get('password')
         try:
-            user = User.objects.get(username=username)
+            user = User.objects.get(email=email)
         except:
             messages.error(request, 'Такого пользователя не существует')
             return redirect('login')
-        user = authenticate(request, username=username, password=password)
+        user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
             return redirect('Homepage')
         else:
             messages.error(request, 'Такой пары пользователь/пароль не существует')
-    context = {'page':page}
+    context = {'page': page}
     return render(request, 'base/login_register.html', context)
 
 
@@ -46,9 +44,9 @@ def logoutUser(request):
 
 def registerUser(request):
     #page = 'register'
-    form = UserCreationForm()
+    form = UserCreation_Custom()
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = UserCreation_Custom(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
             user.username = user.username.lower()
@@ -84,13 +82,13 @@ def authorize(request, pk):
     if request.method == "POST":
         comment = Assigned_material.objects.create(
             user_id=request.user,
-            Authorize_id=auth_id,
+            authorize_id=auth_id,
             body=request.POST.get('body')
         )
         auth_id.participants.add(request.user)
         return redirect('Authorize', pk=auth_id.id)
 
-    context = {'auth_id_id': auth_id, 'comments': comments, 'participants': participants}
+    context = {'auth_id': auth_id, 'comments': comments, 'participants': participants}
     return render(request, 'base/authorize.html', context)
 
 
@@ -100,7 +98,7 @@ def navbar(request):
 
 def userProfile(request, pk):
     user_opened = User.objects.get(id=pk)
-    Authorize_mode = user_opened.Authorize_set.all()
+    Authorize_mode = user_opened.authorize_set.all()
     auth_id_comments = user_opened.assigned_material_set.all()
     books = Book.objects.all()
     context = {'user': user_opened, 'authorize_mode': Authorize_mode, 'auth_id_comments': auth_id_comments, 'books': books}
@@ -174,7 +172,7 @@ def updateProfile(request):
     user = request.user
     form = UserForm(instance=user)
     if request.method == "POST":
-        form = UserForm(request.POST, instance=user)
+        form = UserForm(request.POST, request.FILES, instance=user)
         if form.is_valid():
             form.save()
             return redirect('user-profile', pk=user.id)
@@ -186,8 +184,8 @@ def topicsPage(request):
     return render(request, 'base/topics.html', {'topics': topics})
 
 def activitiesPage(request):
-    auth_id_comments = Assigned_material.objects.all()
-    return render(request, 'base/activity.html', {'auth_id_comments': auth_id_comments})
+    auth_comments = Assigned_material.objects.all()
+    return render(request, 'base/activity.html', {'auth_comments': auth_comments})
 
 def file_upload(request):
     if request.method == 'POST':

@@ -16,17 +16,12 @@
             <form class="form" action="" method="POST">
               {% csrf_token %}
               <div class="form__group form__group">
-                <label for="username">Логин пользователя</label>
-                <input id="username" name="Логин пользователя" type="text" placeholder="e.g. dennis_ivy" />
+                <label for="username">Email</label>
+                <input id="username" name="email" type="text" placeholder="manger3223 или другой пользователь" />
               </div>
               <div class="form__group">
                 <label for="password">Пароль</label>
-                <input
-                  id="password"
-                  name="Пароль"
-                  type="password"
-                  placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"
-                />
+                <input id="password" name="Пароль" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"/>
               </div>
 
               <button class="btn btn--main" type="submit">
@@ -76,12 +71,12 @@
                 {{field}}
               </div>
               {% endfor %}
-              <form action="" method="POST">
+              <!-- <form action="" method="POST">
               <p><b>Укажите Ваш тип сотрудничества *</b></p>
               <p><input type="radio" name="answer" value="a1">Читатель<Br>
               <input type="radio" name="answer" value="a2">Постоянный сотрудник журнала<Br>
               <input type="radio" name="answer" value="a3">Администратор</p>
-              </form>
+              </form> -->
               <!-- Based on answer from this radiobutton, add mode to new user -->
               <button class="btn btn--main" type="submit">
                 <svg

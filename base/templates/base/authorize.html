@@ -63,10 +63,10 @@
                 <span>{{auth_id.created|timesince}} ago</span>
               </div>
               <div class="room__hosted">
-                <p>Hosted By</p>
+                <p>Владелец:</p>
                 <a href="{% url 'user-profile' auth_id.host.id %}" class="room__author">
                   <div class="avatar avatar--small">
-                    <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+                    <img src="{{auth_id.host.avatar.url}}" />
                   </div>
                   <span>@{{auth_id.host.username}}</span>
                 </a>
@@ -86,7 +86,7 @@
                     <div class="thread__author">
                       <a href="{% url 'user-profile' comment.user_id.id %}" class="thread__authorInfo">
                         <div class="avatar avatar--small">
-                          <img src="https://randomuser.me/api/portraits/men/37.jpg" />
+                          <img src="{{comment.user_id.avatar.url}}" />
                         </div>
                         <span>@{{comment.user_id.username}}</span>
                       </a>

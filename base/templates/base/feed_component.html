@@ -3,7 +3,7 @@
             <div class="roomListRoom__header">
               <a href="{% url 'user-profile' auth_id.host.id%}" class="roomListRoom__author">
                 <div class="avatar avatar--small">
-                  <img src="https://randomuser.me/api/portraits/women/11.jpg" />
+                  <img src="{{auth_id.host.avatar.url}}" />
                 </div>
                 <span>@{{auth_id.host.username}}</span>
               </a>
@@ -31,7 +31,7 @@
                     d="M12 16c3.859 0 7-3.141 7-7s-3.141-7-7-7c-3.859 0-7 3.141-7 7s3.141 7 7 7zM12 4c2.757 0 5 2.243 5 5s-2.243 5-5 5-5-2.243-5-5c0-2.757 2.243-5 5-5z"
                   ></path>
                 </svg>
-                  {{auth_id.participants.all.count}} Joined
+                  {{auth_id.participants.all.count}} присоединилось
               </a>
               <p class="roomListRoom__topic">{{auth_id.book.name}}</p>
             </div>
