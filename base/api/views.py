@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from base.models import Authorize
 from .serializers import AuthSerializer
 @api_view(['GET'])
-def getRoutes(request):
+def get_Routes(request):
     routes = [
         'GET /api',
         'GET /api/Authorize',
@@ -13,14 +13,14 @@ def getRoutes(request):
 
 
 @api_view(['GET'])
-def getAuthorizes(request):
-    auth_id = Authorize.objects.all()
-    serializer = AuthSerializer(auth_id, many=True)
+def get_Authorizes(request):
+    auth_id_id = Authorize.objects.all()
+    serializer = AuthSerializer(auth_id_id, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
-def getAuthorize(request, pk):
-    auth_id = Authorize.objects.get(id=pk)
-    serializer = AuthSerializer(auth_id, many=False)
+def get_Authorize(request, pk):
+    auth_id_id = Authorize.objects.get(id=pk)
+    serializer = AuthSerializer(auth_id_id, many=False)
     return Response(serializer.data)
