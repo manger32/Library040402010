@@ -84,7 +84,7 @@ def authorize(request, pk):
     if request.method == "POST":
         comment = Assigned_material.objects.create(
             user_id=request.user,
-            Authorize_id=auth_id,
+            authorize_id=auth_id,
             body=request.POST.get('body')
         )
         auth_id.participants.add(request.user)
