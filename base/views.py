@@ -20,13 +20,12 @@ def loginPage(request):
     if request.user.is_authenticated:
         return redirect('Homepage')
     if request.method == 'POST':
-        email = request.POST.get('email').lower
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
         try:
             user = User.objects.get(email=email)
         except:
             messages.error(request, 'Такого пользователя не существует')
-            return redirect('login')
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)

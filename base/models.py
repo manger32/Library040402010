@@ -22,7 +22,6 @@ class Authorize(models.Model):
     name = models.CharField(max_length=50)
     mode = models.IntegerField(choices = Mode.choices)
     login = models.CharField(max_length = 100)
-    password = models.CharField(max_length = 100)
     description = models.CharField(max_length=50, null=True)
     participants = models.ManyToManyField(User, related_name='participants', blank=True)
     assigned = models.ForeignKey('Assigned_material', on_delete=models.SET_NULL, null=True)
