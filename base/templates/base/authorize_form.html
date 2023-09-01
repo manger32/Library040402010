@@ -52,12 +52,12 @@
 
             </div> -->
             <div class="container">
-              <label for="file_upload">Загрузка файла материала</label>
+              <label for="file-upload">Загрузка файла материала</label>
               <a href="{% url 'file-upload' %}">Загрузить</a>
             </div>
 
             <div class="form__action">
-              <a class="btn btn--dark" href="index.html">Отмена</a>
+              <a class="btn btn--dark" href="{% url 'Homepage' %}">Отмена</a>
               <button class="btn btn--main" type="submit">Сохранить</button>
             </div>
           </form>
